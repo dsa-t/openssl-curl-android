@@ -1,0 +1,24 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/android:api-24-ndk
+
+    working_directory: ~
+
+    environment:
+      MIN_SDK_VERSION: 21
+      HOST_TAG: linux-x86_64
+
+    steps:
+      - checkout
+
+      - run: git submodule update --init --recursive
+
+      - run: sudo sh -c "apt update && apt install autoconf libtool"
+
+      - run: chmod +x ./build.sh && ./build.sh
+
+      - store_artifacts:
+          path: ~/openssl-curl-android/build
+          
