@@ -20,5 +20,5 @@ jobs:
       - run: chmod +x ./build.sh && ./build.sh
 
       - store_artifacts:
-          path: ~/openssl-curl-android/build
-          
+          path: build
+
