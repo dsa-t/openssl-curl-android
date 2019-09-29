@@ -13,18 +13,18 @@ popd() {
 update-to-latest-tag() {
 	pushd "$1"
 	git fetch --all
-	git checkout "$(git describe  --abbrev=0 origin/master)"
+	git checkout "$(git describe  --abbrev=0 origin/$2)"
 	popd
 }
 
 get-tag() {
 	pushd "$1"
-	git describe  --abbrev=0 origin/master
+	git describe  --abbrev=0 origin/$2
 	popd
 }
 
-update-to-latest-tag openssl
-update-to-latest-tag curl
+update-to-latest-tag openssl master
+update-to-latest-tag curl OpenSSL_1_1_1-stable
 
 openssl_tag="$(get-tag openssl)"
 curl_tag="$(get-tag curl)"
