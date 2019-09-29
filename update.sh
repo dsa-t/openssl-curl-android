@@ -29,4 +29,4 @@ update-to-latest-tag openssl OpenSSL_1_1_1-stable
 openssl_tag="$(get-tag openssl)"
 curl_tag="$(get-tag curl)"
 git commit -am "curl $curl_tag openssl $openssl_tag"
-#git push
+git push
