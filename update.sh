@@ -19,12 +19,12 @@ update-to-latest-tag() {
 
 get-tag() {
 	pushd "$1"
-	git describe  --abbrev=0 origin/$2
+	git describe  --abbrev=0
 	popd
 }
 
-update-to-latest-tag openssl master
-update-to-latest-tag curl OpenSSL_1_1_1-stable
+update-to-latest-tag curl master
+update-to-latest-tag openssl OpenSSL_1_1_1-stable
 
 openssl_tag="$(get-tag openssl)"
 curl_tag="$(get-tag curl)"
