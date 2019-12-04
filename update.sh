@@ -23,6 +23,8 @@ get-tag() {
 	popd
 }
 
+git pull
+
 update-to-latest-tag curl master
 update-to-latest-tag openssl OpenSSL_1_1_1-stable
 
