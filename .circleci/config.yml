@@ -19,6 +19,8 @@ jobs:
 
       - run: chmod +x ./build.sh && ./build.sh
 
+      - run: tar cvzf curl.tar.gz build
+
       - store_artifacts:
-          path: build
+          path: curl.tar.gz
 
