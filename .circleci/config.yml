@@ -24,24 +24,36 @@ jobs:
       - store_artifacts:
           path: curl.tar.gz
 
+      - run: echo "$(git -C curl describe --abbrev=0)"_"$(git -C openssl describe --abbrev=0)" > VERSION
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - curl.tar.gz
+            - VERSION
+
+
+
   publish-github-release:
-
     docker:
-
       - image: cibuilds/github:0.10
-
     steps:
-
       - attach_workspace:
-
           at: ./artifacts
-
       - run:
-
           name: "Publish Release on GitHub"
-
           command: |
+            VERSION=$(cat ./artifacts/VERSION)
+            mv ./artifacts/curl.tar.gz ./artifacts/${VERSION}.tar.gz
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/${VERSION}.tar.gz
 
-            VERSION=$(my-binary --version)
+workflows:
+  version: 2
+  build-and-publish-release:
+    jobs:
+      - build
+      - publish-github-release:
+          requires:
+            - build
+            
 
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
