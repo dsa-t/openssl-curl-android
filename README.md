@@ -1,6 +1,7 @@
 # openssl-curl-android
 
 Compile openssl and curl for Android.
+This is a personal fork of [robertying/openssl-curl-android](https://github.com/robertying/openssl-curl-android).
 
 ## Prerequisites
 
@@ -10,7 +11,7 @@ And also necessary `autoconf` and `libtool` toolchains.
 
 ## Download
 
-Binaries can be found on CircleCI: [![CircleCI](https://circleci.com/gh/Pipeliner/openssl-curl-android.svg?style=svg)](https://circleci.com/gh/Pipeliner/openssl-curl-android) at the "Artifacts" page of the latest build.
+If you do not want to compile them yourself, you can download pre-compiled binaries and static libraries from [releases](https://github.com/Pipeliner/openssl-curl-android/releases). They are built by CircleCI: [![CircleCI](https://circleci.com/gh/Pipeliner/openssl-curl-android.svg?style=svg)](https://circleci.com/gh/Pipeliner/openssl-curl-android)
 
 ## Usage
 
