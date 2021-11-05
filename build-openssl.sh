@@ -35,7 +35,7 @@ cp -R $PWD/build/armeabi-v7a ../build/openssl/
 export TARGET_HOST=i686-linux-android
 ./Configure android-x86 no-shared \
  -D__ANDROID_API__=$MIN_SDK_VERSION \
- --prefix=$PWD/build/x86
+ --prefix=$PWD/build/x86 -latomic  # https://github.com/openssl/openssl/issues/14083
 
 make -j4
 make install_sw
