@@ -156,7 +156,8 @@ export SSL_DIR=$PWD/../openssl/build/x86
             --disable-smtp \
             --disable-smtps \
             --disable-telnet \
-            --disable-tftp
+            --disable-tftp \
+            -latomic
 
 make -j4
 make install
@@ -209,7 +210,8 @@ export SSL_DIR=$PWD/../openssl/build/x86_64
             --disable-smtp \
             --disable-smtps \
             --disable-telnet \
-            --disable-tftp
+            --disable-tftp \
+	    -latomic
 
 make -j4
 make install
