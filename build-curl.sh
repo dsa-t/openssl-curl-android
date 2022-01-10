@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eux
 
 mkdir -p build/curl
 cd curl
