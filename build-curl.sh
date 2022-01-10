@@ -124,6 +124,8 @@ export RANLIB=$TOOLCHAIN/bin/$TARGET_HOST-ranlib
 export STRIP=$TOOLCHAIN/bin/$TARGET_HOST-strip
 export SSL_DIR=$PWD/../openssl/build/x86
 
+export CFLAGS=-latomic
+
 ./configure --host=$TARGET_HOST \
             --target=$TARGET_HOST \
             --prefix=$PWD/build/x86 \
@@ -176,6 +178,8 @@ export LD=$TOOLCHAIN/bin/$TARGET_HOST-ld
 export RANLIB=$TOOLCHAIN/bin/$TARGET_HOST-ranlib
 export STRIP=$TOOLCHAIN/bin/$TARGET_HOST-strip
 export SSL_DIR=$PWD/../openssl/build/x86_64
+
+export CFLAGS=-latomic
 
 ./configure --host=$TARGET_HOST \
             --target=$TARGET_HOST \
