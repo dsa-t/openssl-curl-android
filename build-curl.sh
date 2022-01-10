@@ -17,11 +17,12 @@ export LD=$TOOLCHAIN/bin/$TARGET_HOST-ld
 export RANLIB=$TOOLCHAIN/bin/$TARGET_HOST-ranlib
 export STRIP=$TOOLCHAIN/bin/$TARGET_HOST-strip
 export SSL_DIR=$PWD/../openssl/build/arm64-v8a
+export PKG_CONFIG_PATH=$SSL_DIR/lib/pkgconfig
 
 ./configure --host=$TARGET_HOST \
             --target=$TARGET_HOST \
             --prefix=$PWD/build/arm64-v8a \
-            --with-ssl=$SSL_DIR \
+            --with-openssl \
             --disable-shared \
             --disable-verbose \
             --disable-manual \
@@ -70,11 +71,12 @@ export LD=$TOOLCHAIN/bin/$TARGET_HOST-ld
 export RANLIB=$TOOLCHAIN/bin/arm-linux-androideabi-ranlib
 export STRIP=$TOOLCHAIN/bin/arm-linux-androideabi-strip
 export SSL_DIR=$PWD/../openssl/build/armeabi-v7a
+export PKG_CONFIG_PATH=$SSL_DIR/lib/pkgconfig
 
 ./configure --host=$TARGET_HOST \
             --target=$TARGET_HOST \
             --prefix=$PWD/build/armeabi-v7a \
-            --with-ssl=$SSL_DIR \
+            --with-openssl \
             --disable-shared \
             --disable-verbose \
             --disable-manual \
@@ -123,13 +125,12 @@ export LD=$TOOLCHAIN/bin/$TARGET_HOST-ld
 export RANLIB=$TOOLCHAIN/bin/$TARGET_HOST-ranlib
 export STRIP=$TOOLCHAIN/bin/$TARGET_HOST-strip
 export SSL_DIR=$PWD/../openssl/build/x86
-
-export CFLAGS=-latomic
+export PKG_CONFIG_PATH=$SSL_DIR/lib/pkgconfig
 
 ./configure --host=$TARGET_HOST \
             --target=$TARGET_HOST \
             --prefix=$PWD/build/x86 \
-            --with-ssl=$SSL_DIR \
+            --with-openssl \
             --disable-shared \
             --disable-verbose \
             --disable-manual \
@@ -178,13 +179,12 @@ export LD=$TOOLCHAIN/bin/$TARGET_HOST-ld
 export RANLIB=$TOOLCHAIN/bin/$TARGET_HOST-ranlib
 export STRIP=$TOOLCHAIN/bin/$TARGET_HOST-strip
 export SSL_DIR=$PWD/../openssl/build/x86_64
-
-export CFLAGS=-latomic
+export PKG_CONFIG_PATH=$SSL_DIR/lib/pkgconfig
 
 ./configure --host=$TARGET_HOST \
             --target=$TARGET_HOST \
             --prefix=$PWD/build/x86_64 \
-            --with-ssl=$SSL_DIR \
+            --with-openssl \
             --disable-shared \
             --disable-verbose \
             --disable-manual \

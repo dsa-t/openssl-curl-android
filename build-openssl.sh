@@ -55,4 +55,8 @@ make clean
 mkdir -p ../build/openssl/x86_64
 cp -R $PWD/build/x86_64 ../build/openssl/
 
+# Patch x86* pkg-config files to include -latomic
+find $PWD/build/x86* -name libcrypto.pc -exec \
+ sed -i '{}' -e 's/^Libs:.*/& -latomic/g' ';'
+
 cd ..
