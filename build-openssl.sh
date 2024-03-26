@@ -1,62 +1,97 @@
 #!/bin/bash
-set -eux
 
-mkdir -p build/openssl
-cd openssl
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export CORES=$((`sysctl -n hw.logicalcpu`+1))
+else
+    export CORES=$((`nproc`+1))
+fi
 
-export TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/$HOST_TAG
+export TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/$HOST_TAG
+
+export ANDROID_NDK_HOME=$NDK
 PATH=$TOOLCHAIN/bin:$PATH
+
+#mkdir -p build/openssl
+cd openssl
 
 # arm64
 export TARGET_HOST=aarch64-linux-android
-./Configure android-arm64 no-shared \
- -D__ANDROID_API__=$MIN_SDK_VERSION \
- --prefix=$PWD/build/arm64-v8a
+export ANDROID_ARCH=arm64-v8a
+export AR=$TOOLCHAIN/bin/llvm-ar
+export CC=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang
+export AS=$CC
+export CXX=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang++
+export LD=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang
+export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
+export STRIP=$TOOLCHAIN/bin/llvm-strip
 
-make -j4
+./Configure android-arm64 \
+ --prefix=$PWD/build/$ANDROID_ARCH/usr
+
+make CALC_VERSIONS="SHLIB_COMPAT=; SHLIB_SOVER=" -j$CORES
 make install_sw
 make clean
-mkdir -p ../build/openssl/arm64-v8a
-cp -R $PWD/build/arm64-v8a ../build/openssl/
+#mkdir -p ../build/openssl/$ANDROID_ARCH
+cp -R $PWD/build/$ANDROID_ARCH/* ${CONF_SYSROOT}/${ANDROID_ARCH}/
 
 # arm
-export TARGET_HOST=armv7a-linux-androideabi
-./Configure android-arm no-shared \
- -D__ANDROID_API__=$MIN_SDK_VERSION \
- --prefix=$PWD/build/armeabi-v7a
-
-make -j4
-make install_sw
-make clean
-mkdir -p ../build/openssl/armeabi-v7a
-cp -R $PWD/build/armeabi-v7a ../build/openssl/
+#export TARGET_HOST=arm-linux-androideabi
+#export ANDROID_ARCH=armeabi-v7a
+#export AR=$TOOLCHAIN/bin/llvm-ar
+#export CC=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang
+#export AS=$CC
+#export CXX=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang++
+#export LD=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang
+#export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
+#export STRIP=$TOOLCHAIN/bin/llvm-strip
+#
+#./Configure android-arm \
+# --prefix=$PWD/build/$ANDROID_ARCH/usr
+#
+#make CALC_VERSIONS="SHLIB_COMPAT=; SHLIB_SOVER=" -j$CORES
+#make install_sw
+#make clean
+##mkdir -p ../build/openssl/$ANDROID_ARCH
+#cp -R $PWD/build/$ANDROID_ARCH/* ${CONF_SYSROOT}/${ANDROID_ARCH}/
 
 # x86
-export TARGET_HOST=i686-linux-android
-./Configure android-x86 no-shared \
- -D__ANDROID_API__=$MIN_SDK_VERSION \
- --prefix=$PWD/build/x86 -latomic  # https://github.com/openssl/openssl/issues/14083
-
-make -j4
-make install_sw
-make clean
-mkdir -p ../build/openssl/x86
-cp -R $PWD/build/x86 ../build/openssl/
+#export TARGET_HOST=i686-linux-android
+#export ANDROID_ARCH=x86
+#export AR=$TOOLCHAIN/bin/llvm-ar
+#export CC=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang
+#export AS=$CC
+#export CXX=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang++
+#export LD=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang
+#export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
+#export STRIP=$TOOLCHAIN/bin/llvm-strip
+#
+#./Configure android-x86 \
+# --prefix=$PWD/build/$ANDROID_ARCH/usr
+#
+#make CALC_VERSIONS="SHLIB_COMPAT=; SHLIB_SOVER=" -j$CORES
+#make install_sw
+#make clean
+##mkdir -p ../build/openssl/$ANDROID_ARCH
+#cp -R $PWD/build/$ANDROID_ARCH/* ${CONF_SYSROOT}/${ANDROID_ARCH}/
 
 # x64
 export TARGET_HOST=x86_64-linux-android
-./Configure android-x86_64 no-shared \
- -D__ANDROID_API__=$MIN_SDK_VERSION \
- --prefix=$PWD/build/x86_64 -latomic  # https://github.com/openssl/openssl/issues/14083
+export ANDROID_ARCH=x86_64
+export AR=$TOOLCHAIN/bin/llvm-ar
+export CC=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang
+export AS=$CC
+export CXX=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang++
+export LD=$TOOLCHAIN/bin/$TARGET_HOST$MIN_SDK_VERSION-clang
+export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
+export STRIP=$TOOLCHAIN/bin/llvm-strip
 
-make -j4
+./Configure android-x86_64 \
+ --prefix=$PWD/build/$ANDROID_ARCH/usr
+
+make CALC_VERSIONS="SHLIB_COMPAT=; SHLIB_SOVER=" -j$CORES
 make install_sw
 make clean
-mkdir -p ../build/openssl/x86_64
-cp -R $PWD/build/x86_64 ../build/openssl/
-
-# Patch x86* pkg-config files to include -latomic
-find $PWD/build/x86* -name libcrypto.pc -exec \
- sed -i '{}' -e 's/^Libs:.*/& -latomic/g' ';'
+#mkdir -p ../build/openssl/$ANDROID_ARCH
+cp -R $PWD/build/$ANDROID_ARCH/* ${CONF_SYSROOT}/${ANDROID_ARCH}/
 
 cd ..
